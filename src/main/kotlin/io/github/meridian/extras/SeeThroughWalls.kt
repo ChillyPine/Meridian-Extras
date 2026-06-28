@@ -2,17 +2,12 @@ package io.github.meridian.extras
 
 import io.github.meridian.features.types.SwitchFeature
 
-/**
- * Re-enables Meridian's see-through-walls ESP rendering. The base mod ships no
- * way to turn this on (legit-only); here the enabled state is wired into
- * [io.github.meridian.utils.ESP.setSeeThroughProvider] by [MeridianExtras].
- */
 object SeeThroughWalls : SwitchFeature(
-    name = "ESP See-Through Walls",
-    description = "Render boxes and tracers through walls.",
-    category = "General",        // must match an existing CategoryPanel id
+    name = "ESP Toggle",
+    description = "Render §lall §rboxes and tracers through walls.\n§cUse at your own risk.",
+    category = "General",
     configKey = "seethrough_walls",
-    subcategory = "ESP"
+    subcategory = "Miscellaneous",
 ) {
-    init { external = true }     // gold border in GUI + search
+    init { external = true }
 }

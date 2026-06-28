@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"id": "meridian_extras",
+	"version": "${version}",
+	"name": "Meridian Extras",
+	"description": "Addon for Meridian that adds non-legit features (e.g. see-through-walls ESP).",
+	"authors": [
+		"ChillyPine"
+	],
+	"contact": {
+		"sources": "https://github.com/ChillyPine/meridian-extras"
+	},
+	"license": "MIT",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			{
+				"value": "io.github.meridian.extras.MeridianExtras",
+				"adapter": "kotlin"
+			}
+		]
+	},
+	"depends": {
+		"meridian": "*",
+		"fabricloader": ">=0.19.3",
+		"minecraft": "~26.1",
+		"java": ">=25",
+		"fabric-language-kotlin": "*"
+	}
+}

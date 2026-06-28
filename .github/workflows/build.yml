@@ -1,0 +1,45 @@
+# Extras compiles against the base Meridian jar (see build.gradle's
+# `../meridian/build/libs/...` dependency). That jar doesn't exist on a clean
+# runner, so this workflow checks out the Meridian repo as a sibling, builds it,
+# and then builds Extras against the freshly produced jar.
+
+name: build
+on: [pull_request, push]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: checkout meridian-extras
+        uses: actions/checkout@v6
+        with:
+          path: meridian-extras
+      - name: checkout meridian (base mod dependency)
+        uses: actions/checkout@v6
+        with:
+          repository: ChillyPine/Meridian
+          ref: main
+          path: meridian
+      - name: validate gradle wrapper
+        uses: gradle/actions/wrapper-validation@v6
+      - name: setup jdk
+        uses: actions/setup-java@v5
+        with:
+          java-version: '25'
+          distribution: 'microsoft'
+      - name: make gradle wrappers executable
+        run: chmod +x meridian/gradlew meridian-extras/gradlew
+      - name: build base mod (provides the jar Extras compiles against)
+        working-directory: meridian
+        run: ./gradlew build
+      - name: read base mod version
+        id: meridian
+        run: echo "version=$(grep '^mod_version=' meridian/gradle.properties | cut -d '=' -f2 | tr -d '[:space:]')" >> "$GITHUB_OUTPUT"
+      - name: build extras
+        working-directory: meridian-extras
+        run: ./gradlew build -Pmeridian_version=${{ steps.meridian.outputs.version }}
+      - name: capture build artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: Artifacts
+          path: meridian-extras/build/libs/
